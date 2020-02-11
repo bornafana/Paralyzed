@@ -37,5 +37,10 @@ MonoBehaviour:
   - RPC_CreatePlayer
   - RPC_LoadedGameScene
   - PlaySound
+  - RPC_Whistle
+  - AddLife
+  - RemoveLife
+  - RPC_SetRemainingLives
+  - RPC_SetTotalLives
   DisableAutoOpenWizard: 1
   ShowSettings: 1

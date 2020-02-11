@@ -8,6 +8,7 @@
 // <author>developer@exitgames.com</author>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Photon.Pun.UtilityScripts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -76,11 +77,13 @@ namespace Photon.Pun.Demo.PunBasics
 			// #Critical
 			// this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
 			PhotonNetwork.AutomaticallySyncScene = true;
-
-		}
+        }
 
         void Update()
         {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             // #Critical: We only load if we are the first player, else we rely on  PhotonNetwork.AutomaticallySyncScene to sync our instance scene.
             if (playersInRoom == 1)
             {
@@ -97,6 +100,7 @@ namespace Photon.Pun.Demo.PunBasics
 
 		#region Public Methods
 
+       
 		/// <summary>
 		/// Start the connection process. 
 		/// - If already connected, we attempt joining a random room
@@ -208,8 +212,7 @@ namespace Photon.Pun.Demo.PunBasics
 
 			isConnecting = false;
 			controlPanel.SetActive(true);
-
-		}
+        }
 
 		/// <summary>
 		/// Called when entering a room (by creating or joining it). Called on all clients (including the Master Client).
@@ -225,7 +228,7 @@ namespace Photon.Pun.Demo.PunBasics
 		public override void OnJoinedRoom()
 		{
 			LogFeedback("<Color=Green>OnJoinedRoom</Color> with "+PhotonNetwork.CurrentRoom.PlayerCount+" Player(s)");
-			Debug.Log("PUN Basics Tutorial/Launcher: OnJoinedRoom() called by PUN. Now this client is in a room.\nFrom here on, your game would be running.");
+			Debug.Log("OnJoinedRoom() called by PUN. Now this client is in a room.\nFrom here on, your game would be running.");
             
             playersInRoom++;
         }

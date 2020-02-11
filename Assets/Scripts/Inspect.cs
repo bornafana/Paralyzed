@@ -14,12 +14,12 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class Inspect : Interactable
 {
-    InspectBase inspectBase;
-    FirstPersonController player;
+    private InspectBase inspectBase;
+    private FirstPersonController player;
+    private RigidbodyFirstPersonController rb_Player;
     public float sizeMultiplier;
     public string itemInfoText;
     private LayerMask defaultLayerMask;
-
 
     // public CamZoom camZoom;
     // public float lerpSpeed = 0.5f;
@@ -68,7 +68,7 @@ public class Inspect : Interactable
     public void Start()
     {
         defaultLayerMask = gameObject.layer;
-        StartCoroutine(GetInspectionBase(0.2f, InitializeInspectionBase));
+        StartCoroutine(GetInspectionBase(GameManager.Instance.playerSpawnDelay + 0.1f, InitializeInspectionBase));
     }
 
     public override void DoAction()
@@ -98,10 +98,21 @@ public class Inspect : Interactable
         //transform.LookAt(player.transform);
         inspectBase.descriptionTextUI.text = itemInfoText;
 
-        player.m_WalkSpeed = inspectBase.moveSpeedDuringInspect;
-        player.m_RunSpeed = inspectBase.runMultiplierDuringInspect;
-        player.m_MouseLook.XSensitivity = inspectBase.mouseSensitivityDuringInspect;
-        player.m_MouseLook.YSensitivity = inspectBase.mouseSensitivityDuringInspect;
+        if (rb_Player != null)
+        {
+            rb_Player.movementSettings.ForwardSpeed = inspectBase.moveSpeedDuringInspect;
+            rb_Player.movementSettings.RunMultiplier = inspectBase.runMultiplierDuringInspect;
+            rb_Player.mouseLook.XSensitivity = inspectBase.mouseSensitivityDuringInspect;
+            rb_Player.mouseLook.YSensitivity = inspectBase.mouseSensitivityDuringInspect;
+        }
+        else if (player != null)
+        {
+            player.m_WalkSpeed = inspectBase.moveSpeedDuringInspect;
+            player.m_RunSpeed = inspectBase.runMultiplierDuringInspect;
+            player.m_MouseLook.XSensitivity = inspectBase.mouseSensitivityDuringInspect;
+            player.m_MouseLook.YSensitivity = inspectBase.mouseSensitivityDuringInspect;
+        }
+        
     }
 
     void Update()
@@ -146,14 +157,32 @@ public class Inspect : Interactable
                 //camZoom.enabled = true;
                 col.isTrigger = false;
                 inspectBase.crosshairImage.enabled = true;
-                player.enabled = true;
+
+                if (rb_Player != null)
+                    rb_Player.enabled = true;
+                else
+                    player.enabled = true;
+
+
                 StartCoroutine(LerpToOriginalPoint(transform.rotation, inspectBase.cam.fieldOfView));
                 //inspectBase.camZoom.Blur(inspectBase.inspectBlurAmount, inspectBase.camZoom.zoomOutBlur, inspectBase.timeToBlur, false);
 
-                player.m_WalkSpeed = startForwardMoveSpeed;
-                player.m_RunSpeed = startRunMultiplier;
-                player.m_MouseLook.XSensitivity = starXtSensitivity;
-                player.m_MouseLook.YSensitivity = startYsensitivity;
+
+                if (rb_Player != null)
+                {
+                    rb_Player.movementSettings.ForwardSpeed = startForwardMoveSpeed;
+                    rb_Player.movementSettings.RunMultiplier = startRunMultiplier;
+                    rb_Player.mouseLook.XSensitivity = starXtSensitivity;
+                    rb_Player.mouseLook.YSensitivity = startYsensitivity;
+                }
+                else
+                {
+                    player.m_WalkSpeed = startForwardMoveSpeed;
+                    player.m_RunSpeed = startRunMultiplier;
+                    player.m_MouseLook.XSensitivity = starXtSensitivity;
+                    player.m_MouseLook.YSensitivity = startYsensitivity;
+                }
+       
             }
 
         }
@@ -165,7 +194,17 @@ public class Inspect : Interactable
         // Debug.Log("END: " + inspectionPoint.position);
         float timeStartedLerping = Time.time;
         float lerpPercComplete = 0f;
-        Quaternion toRotation = Quaternion.LookRotation(player.transform.position - transform.position);
+        Quaternion toRotation;
+
+        if (rb_Player != null)
+        {
+            toRotation = Quaternion.LookRotation(rb_Player.transform.position - transform.position);
+
+        }
+        else
+        {
+            toRotation = Quaternion.LookRotation(player.transform.position - transform.position);
+        }
         //toRotation.eulerAngles = new Vector3(0f, toRotation.eulerAngles.y, toRotation.eulerAngles.z);
 
         while (lerpPercComplete < 1.0f)
@@ -202,11 +241,21 @@ public class Inspect : Interactable
 
     IEnumerator GetInspectionBase(float delay, Action initialize)
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(delay);
 
         List<FirstPersonController> players = FindObjectsOfType<FirstPersonController>().ToList();
+        List<RigidbodyFirstPersonController> rb_players = FindObjectsOfType<RigidbodyFirstPersonController>().ToList();
+
 
         foreach (FirstPersonController child in players)
+        {
+            if (child.isMine)
+            {
+                inspectBase = FindObjectOfType<InspectBase>();
+            }
+        }
+
+        foreach (RigidbodyFirstPersonController child in rb_players)
         {
             if (child.isMine)
             {
@@ -219,16 +268,30 @@ public class Inspect : Interactable
 
     void InitializeInspectionBase()
     {
-        player = inspectBase.player;
-
         startPos = transform.parent.transform.position;
         startSize = transform.parent.localScale;
         startRotation = transform.rotation;
-        startForwardMoveSpeed = inspectBase.player.m_WalkSpeed;
 
-        startRunMultiplier = inspectBase.player.m_RunSpeed;
-        starXtSensitivity = inspectBase.player.m_MouseLook.XSensitivity;
-        startYsensitivity = inspectBase.player.m_MouseLook.YSensitivity;
+        //rb_Player = inspectBase.rb_Player;
+        //player = inspectBase.player;
+        rb_Player = GameManager.Instance.localPlayer.GetComponent<RigidbodyFirstPersonController>();
+        player = GameManager.Instance.localPlayer.GetComponent<FirstPersonController>();
+
+        if (rb_Player != null)
+        {
+            startForwardMoveSpeed = inspectBase.rb_Player.movementSettings.ForwardSpeed;
+            startRunMultiplier = inspectBase.rb_Player.movementSettings.RunMultiplier;
+            starXtSensitivity = inspectBase.rb_Player.mouseLook.XSensitivity;
+            startYsensitivity = inspectBase.rb_Player.mouseLook.YSensitivity;
+        }
+        else
+        {
+            startForwardMoveSpeed = inspectBase.player.m_WalkSpeed;
+            startRunMultiplier = inspectBase.player.m_RunSpeed;
+            starXtSensitivity = inspectBase.player.m_MouseLook.XSensitivity;
+            startYsensitivity = inspectBase.player.m_MouseLook.YSensitivity;
+        }
+       
 
 
         startFieldOfView = inspectBase.cam.fieldOfView;

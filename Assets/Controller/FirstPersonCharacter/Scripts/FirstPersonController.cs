@@ -84,7 +84,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_AudioSource = GetComponent<AudioSource>();
             m_MouseLook.Init(transform, m_Camera.transform);
 
-            if (!pv.IsMine)
+            if (!isMine)
             {
                 enabled = false;
                 transform.Find("Camera").gameObject.SetActive(false);
@@ -170,7 +170,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
                 m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
-                Debug.Log("Stepping: " + gameObject.name);
+                //Debug.Log("Stepping: " + gameObject.name);
 
                 ProgressStepCycle(speed);
                 UpdateCameraPosition(speed);

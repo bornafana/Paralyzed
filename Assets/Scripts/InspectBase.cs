@@ -22,10 +22,12 @@ public class InspectBase : MonoBehaviour
     public Color startColor;
     public Color colorWhenInspecting;
 
+    [Header("Player Controller Type")]
+    public FirstPersonController player;
+    public RigidbodyFirstPersonController rb_Player;
 
     [Header("Player Settings")]
     public Crosshair crosshairScript;
-    public FirstPersonController player;
     public Camera cam;
     public float moveSpeedDuringInspect;
     public float runMultiplierDuringInspect;
@@ -54,10 +56,21 @@ public class InspectBase : MonoBehaviour
         startSize = transform.localScale;
         startRotation = transform.rotation;
 
-        startForwardMoveSpeed = player.m_WalkSpeed;
-        startRunMultiplier = player.m_RunSpeed;
-        starXtSensitivity = player.m_MouseLook.XSensitivity;
-        startYsensitivity = player.m_MouseLook.YSensitivity;
+        if (rb_Player != null)
+        {
+            startForwardMoveSpeed = rb_Player.movementSettings.ForwardSpeed;
+            startRunMultiplier = rb_Player.movementSettings.RunMultiplier;
+            starXtSensitivity = rb_Player.mouseLook.XSensitivity;
+            startYsensitivity = rb_Player.mouseLook.YSensitivity;
+        }
+        else if (player != null)
+        {
+            startForwardMoveSpeed = player.m_WalkSpeed;
+            startRunMultiplier = player.m_RunSpeed;
+            starXtSensitivity = player.m_MouseLook.XSensitivity;
+            startYsensitivity = player.m_MouseLook.YSensitivity;
+        }
+        
 
         startFieldOfView = cam.fieldOfView;
     }

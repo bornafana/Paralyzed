@@ -5,15 +5,22 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
-public class AlarmTrigger : Interactable
+public class Whistle : MonoBehaviourPun
 {
     private const byte WHISTLE = 0;
 
     public AudioSource source;
     public AudioClip clipToPlay;
-    public override void DoAction()
+
+    void Start()
     {
-        if (photonView.IsMine)
+        if (!photonView.IsMine || !PhotonNetwork.NickName.ToLower().Trim().Contains("mute"))
+            enabled = false;
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
         {
             photonView.RPC("RPC_Whistle", RpcTarget.All, "whistle");
         }
@@ -21,7 +28,7 @@ public class AlarmTrigger : Interactable
 
     void PlaySound()
     {
-        if(!PhotonNetwork.NickName.ToLower().Contains("deaf"))
+        if (!PhotonNetwork.NickName.ToLower().Trim().Contains("deaf"))
             source.PlayOneShot(clipToPlay);
     }
 

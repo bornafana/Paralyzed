@@ -1,20 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Launcher.cs" company="Exit Games GmbH">
-//   Part of: Photon Unity Networking Demos
-// </copyright>
-// <summary>
-//  Used in "PUN Basic tutorial" to handle typical game management requirements
-// </summary>
-// <author>developer@exitgames.com</author>
-// --------------------------------------------------------------------------------------------------------------------
-
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Realtime;
 using UnityEngine.UI;
 using Photon.Pun;
 using UnityStandardAssets.Characters.FirstPerson;
-
 
 #pragma warning disable 649
 
@@ -26,11 +16,15 @@ using UnityStandardAssets.Characters.FirstPerson;
 /// </summary>
 public class GameManager : MonoBehaviourPunCallbacks
 {
-
     #region Public Fields
 
     public static GameManager Instance;
+    public LifeCounter lifeCounter;
+
+    public GameObject localPlayer;
+    public float playerSpawnDelay;
     public Text pingText;
+    private Transform playerRespawnPoint;
 
     #endregion
 
@@ -46,11 +40,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #region MonoBehaviour CallBacks
 
+
     /// <summary>
     /// MonoBehaviour method called on GameObject by Unity during initialization phase.
     /// </summary>
     void Start()
     {
+        playerRespawnPoint = transform;
         Instance = this;
 
         // in case we started this demo with the wrong scene being active, simply load the menu scene
@@ -61,35 +57,45 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        //if (playerPrefab == null) { // #Tip Never assume public properties of Components are filled up properly, always check and inform the developer of it.
+        StartCoroutine(SpawnPlayerWithDelay());
+        //if (FirstPersonController.LocalPlayerInstance == null)
+        //{
+        //    Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
+        //    localPlayer = PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0f, 2f, 0f), Quaternion.identity, 0);
 
-        //	Debug.LogError("<Color=Red><b>Missing</b></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'", this);
-        //} else {
+        //    // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
+        //    //if(PhotonNetwork.NickName.ToLower().Trim().Contains("blind"))
+        //    //    PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0f, 2f, 0f), Quaternion.identity, 1);
+        //    //else if (PhotonNetwork.NickName.ToLower().Trim().Contains("deaf"))
+        //    //    PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(5f, 2f, 0f), Quaternion.identity, 2);
+        //    //else if (PhotonNetwork.NickName.ToLower().Trim().Contains("mute"))
+        //    //    PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(10f, 5f, 0f), Quaternion.identity, 3);
+        //    //else
+        //    //    PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(10f, 5f, 0f), Quaternion.identity, 4);
 
+        //    //Debug.Log("Spawning");
+        //}
+        //else
+        //{
 
-        if (FirstPersonController.LocalPlayerInstance == null)
+        //    Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
+        //}
+    }
+
+    IEnumerator SpawnPlayerWithDelay()
+    {
+        yield return new WaitForSeconds(playerSpawnDelay);
+
+        if (RigidbodyFirstPersonController.LocalPlayerInstance == null)
         {
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
-
-            // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            if(PhotonNetwork.NickName.ToLower().Trim().Contains("blind"))
-                PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0f, 2f, 0f), Quaternion.identity, 1);
-            else if (PhotonNetwork.NickName.ToLower().Trim().Contains("deaf"))
-                PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(5f, 2f, 0f), Quaternion.identity, 2);
-            else if (PhotonNetwork.NickName.ToLower().Trim().Contains("mute"))
-                PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(10f, 5f, 0f), Quaternion.identity, 3);
-            else
-                PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(10f, 5f, 0f), Quaternion.identity, 4);
-
-            //Debug.Log("Spawning");
+            localPlayer = PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0f, 2f, 0f), Quaternion.identity, 0);
         }
         else
         {
 
             Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
         }
-
-
     }
 
 
@@ -103,7 +109,44 @@ public class GameManager : MonoBehaviourPunCallbacks
         // "back" button of phone equals "Escape". quit app if that's pressed
         if (Input.GetKeyDown(KeyCode.Tilde))
         {
-            QuitApplication();
+            PhotonNetwork.LoadLevel(0);
+        }
+
+        CheckForGameOver();
+    }
+
+    public void RespawnPlayer()
+    {
+        StartCoroutine(PlayerControlsCooldown(0.5f));
+        lifeCounter.RemoveLife();
+        localPlayer.transform.position = playerRespawnPoint.position;
+    }
+
+    private IEnumerator PlayerControlsCooldown(float delay)
+    {
+        if (localPlayer.GetComponent<RigidbodyFirstPersonController>() != null)
+        {
+            var playerControls = localPlayer.GetComponent<RigidbodyFirstPersonController>();
+            playerControls.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            playerControls.enabled = false;
+            yield return new WaitForSeconds(delay);
+            playerControls.enabled = true;
+        }
+        else
+        {
+            var playerControls = localPlayer.GetComponent<FirstPersonController>();
+            playerControls.enabled = false;
+            yield return new WaitForSeconds(delay);
+            playerControls.enabled = true;
+        }
+    }
+
+    void CheckForGameOver()
+    {
+        if (lifeCounter.livesRemaining <= 0)
+        {
+            LeaveRoom();
+            PhotonNetwork.LoadLevel(0);
         }
     }
 
