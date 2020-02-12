@@ -42,5 +42,8 @@ MonoBehaviour:
   - RemoveLife
   - RPC_SetRemainingLives
   - RPC_SetTotalLives
+  - RPC_SetSwitchAndColor
+  - RPC_ChangeSwitchRotation
+  - RPC_CheckSwitches
   DisableAutoOpenWizard: 1
   ShowSettings: 1

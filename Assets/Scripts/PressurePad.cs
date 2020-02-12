@@ -7,35 +7,55 @@ using UnityEngine;
 
 public class PressurePad : MonoBehaviourPun
 {
-    private const byte CAGE_DROP = 0;
+    public Animator animator;
+    public Material materialWhenActive;
+    private bool active = false;
 
-    private void Awake()
+    public void OnEvent(EventData photonEvent)
     {
+        if (photonEvent.Code == (byte)PhotonEventCodes.EventCodes.PRESSURE_PAD)
+        {
+            active = true;
+            GetComponent<Renderer>().material = materialWhenActive;
+        }
     }
 
-    private void OnTriggerEnter(Collider col)
+    private void OnEnable()
     {
-        if (col.CompareTag("Player"))
+        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+
+    }
+
+    private void OnDisable()
+    {
+        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+    }
+
+    private void OnCollisionEnter(Collision col)
+    {
+        if (col.transform.CompareTag("Player") && active)
         {
                 DropCage();
+                //animator.SetBool("PlayerOnPad", true);
+        }
+    }
+
+    private void OnCollisionExit(Collision col)
+    {
+        if (col.transform.CompareTag("Player") && active)
+        {
+            //animator.SetBool("PlayerOnPad", false);
         }
     }
 
     private void DropCage()
     {
-        float r = Random.Range(0f, 1f);
-        float g = Random.Range(0f, 1f);
-        float b = Random.Range(0f, 1f);
-
-        GetComponent<Renderer>().material.color = new Color(r, g, b);
-
-        object[] datas = new object[] { r, g, b };
         RaiseEventOptions options = new RaiseEventOptions()
         {
             CachingOption = EventCaching.DoNotCache,
             Receivers = ReceiverGroup.All
         };
 
-        PhotonNetwork.RaiseEvent(CAGE_DROP, null, options, SendOptions.SendUnreliable);
+        PhotonNetwork.RaiseEvent((byte)PhotonEventCodes.EventCodes.CAGE, null, options, SendOptions.SendUnreliable);
     }
 }
