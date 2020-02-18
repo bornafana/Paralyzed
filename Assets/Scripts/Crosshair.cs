@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using TMPro;
 
-public class Crosshair : MonoBehaviour
+public class Crosshair : MonoBehaviourPun
 {
     public LayerMask crosshairLayerMask;
     public float rayCastDistance;
@@ -24,51 +25,53 @@ public class Crosshair : MonoBehaviour
 
     void Start()
     {
-        crosshair = GameObject.FindGameObjectWithTag("Crosshair").transform;
-        objName = GameObject.FindGameObjectWithTag("ObjectName").GetComponent<TextMeshProUGUI>();
+        
     }
 
     void Update()
     {
-        ray = cam.ScreenPointToRay(new Vector2(crosshair.position.x, crosshair.position.y));
-        Debug.DrawRay(ray.origin, ray.direction * rayCastDistance, Color.red, 0.2f);
-        if (Physics.Raycast(ray.origin, ray.direction, out hit, rayCastDistance, crosshairLayerMask))
+        if (photonView.IsMine)
         {
-            //Debug.Log("Hitting : " + hit.transform.name);
-            objName.text = hit.transform.name;
-
-            if (!textFadedIn)
-                StartCoroutine(TextFadeIn());
-
-            //if (hit.transform.CompareTag("Phone") && !phoneUIFadedIn)
-            //{
-            //    StartCoroutine(PhoneSliderFadeIn());
-            //}
-
-            
-            if (Input.GetKeyDown(KeyCode.E))
+            ray = cam.ScreenPointToRay(new Vector2(crosshair.position.x, crosshair.position.y));
+            Debug.DrawRay(ray.origin, ray.direction * rayCastDistance, Color.red, 0.2f);
+            if (Physics.Raycast(ray.origin, ray.direction, out hit, rayCastDistance, crosshairLayerMask))
             {
-                //StartCoroutine(BeginInteractCooldown(interactCooldown));
-                if (hit.transform.GetComponent<Interactable>())
+                //Debug.Log("Hitting : " + hit.transform.name);
+                objName.text = hit.transform.name;
+
+                if (!textFadedIn)
+                    StartCoroutine(TextFadeIn());
+
+                //if (hit.transform.CompareTag("Phone") && !phoneUIFadedIn)
+                //{
+                //    StartCoroutine(PhoneSliderFadeIn());
+                //}
+
+
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    hit.transform.GetComponent<Interactable>().DoAction();
+                    //StartCoroutine(BeginInteractCooldown(interactCooldown));
+                    if (hit.transform.GetComponent<Interactable>())
+                    {
+                        hit.transform.GetComponent<Interactable>().DoAction();
+                    }
                 }
             }
-        }
-        else
-        {
-            if (phoneUIFadedIn)
+            else
             {
-                StartCoroutine(PhoneSliderFadeOut());
+                if (phoneUIFadedIn)
+                {
+                    StartCoroutine(PhoneSliderFadeOut());
+                }
+
+                if (textFadedIn)
+                    StartCoroutine(TextFadeOut());
+
+                //objName.text = "";
             }
 
-            if (textFadedIn)
-                StartCoroutine(TextFadeOut());
-
-            //objName.text = "";
+            //Debug.DrawRay(ray.origin, ray.direction * 10f, Color.red);
         }
-
-        //Debug.DrawRay(ray.origin, ray.direction * 10f, Color.red);
     }
 
     IEnumerator BeginInteractCooldown(float delay)

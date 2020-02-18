@@ -1,5 +1,74 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1156992630
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1156992631}
+  - component: {fileID: 1156992632}
+  m_Layer: 0
+  m_Name: Point Light
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1156992631
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156992630}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.313, z: -2.807}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7464837897441994648}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &1156992632
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156992630}
+  m_Enabled: 1
+  serializedVersion: 8
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 30
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!1 &7464837895819997221
 GameObject:
   m_ObjectHideFlags: 0
@@ -13,6 +82,7 @@ GameObject:
   - component: {fileID: 7464837895819997240}
   - component: {fileID: 2776017}
   - component: {fileID: 2776016}
+  - component: {fileID: 2540155707667701453}
   m_Layer: 10
   m_Name: Switch
   m_TagString: Untagged
@@ -107,6 +177,27 @@ MonoBehaviour:
   switchPanel: {fileID: 1626639472}
   switchOn: 0
   switchColor: {fileID: 0}
+--- !u!114 &2540155707667701453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7464837895819997221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7464837895912227904
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,6 +421,7 @@ GameObject:
   - component: {fileID: 7464837896759701252}
   - component: {fileID: 1211073774}
   - component: {fileID: 1211073773}
+  - component: {fileID: 7018291367842111147}
   m_Layer: 10
   m_Name: Switch
   m_TagString: Untagged
@@ -424,6 +516,27 @@ MonoBehaviour:
   switchPanel: {fileID: 1626639472}
   switchOn: 0
   switchColor: {fileID: 0}
+--- !u!114 &7018291367842111147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7464837896759701254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7464837896928004906
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,6 +550,7 @@ GameObject:
   - component: {fileID: 7464837896928004904}
   - component: {fileID: 1582784706}
   - component: {fileID: 1582784705}
+  - component: {fileID: 1447631514434331080}
   m_Layer: 10
   m_Name: Switch
   m_TagString: Untagged
@@ -531,6 +645,27 @@ MonoBehaviour:
   switchPanel: {fileID: 1626639472}
   switchOn: 0
   switchColor: {fileID: 0}
+--- !u!114 &1447631514434331080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7464837896928004906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7464837896929179439
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,6 +749,7 @@ GameObject:
   - component: {fileID: 7464837897028414175}
   - component: {fileID: 1481851189}
   - component: {fileID: 1481851188}
+  - component: {fileID: 6348681000575274909}
   m_Layer: 10
   m_Name: Switch
   m_TagString: Untagged
@@ -708,6 +844,27 @@ MonoBehaviour:
   switchPanel: {fileID: 1626639472}
   switchOn: 0
   switchColor: {fileID: 0}
+--- !u!114 &6348681000575274909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7464837897028414169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7464837897065350992
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,6 +1018,7 @@ GameObject:
   - component: {fileID: 7464837897152257376}
   - component: {fileID: 1404155530}
   - component: {fileID: 1404155529}
+  - component: {fileID: 49970083508187319}
   m_Layer: 10
   m_Name: Switch
   m_TagString: Untagged
@@ -955,6 +1113,27 @@ MonoBehaviour:
   switchPanel: {fileID: 1626639472}
   switchOn: 0
   switchColor: {fileID: 0}
+--- !u!114 &49970083508187319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7464837897152257378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7464837897166732888
 GameObject:
   m_ObjectHideFlags: 0
@@ -968,6 +1147,7 @@ GameObject:
   - component: {fileID: 7464837897166732894}
   - component: {fileID: 1349309876}
   - component: {fileID: 1349309875}
+  - component: {fileID: 7239355213585153233}
   m_Layer: 10
   m_Name: Switch
   m_TagString: Untagged
@@ -1062,6 +1242,27 @@ MonoBehaviour:
   switchPanel: {fileID: 1626639472}
   switchOn: 0
   switchColor: {fileID: 0}
+--- !u!114 &7239355213585153233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7464837897166732888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &7464837897441994628
 GameObject:
   m_ObjectHideFlags: 0
@@ -1101,6 +1302,7 @@ Transform:
   - {fileID: 7464837896273693171}
   - {fileID: 7464837897065350993}
   - {fileID: 7464837897503156458}
+  - {fileID: 1156992631}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1182,7 +1384,7 @@ MonoBehaviour:
   - {fileID: 1349309875}
   - {fileID: 1211073773}
   - {fileID: 1481851188}
-  correctPattern: 01010101010101
+  correctPattern: 01000100000001
   switchPattern: 
 --- !u!114 &1626639471
 MonoBehaviour:
@@ -1289,6 +1491,7 @@ GameObject:
   - component: {fileID: 7464837897631292849}
   - component: {fileID: 1950103131}
   - component: {fileID: 1950103130}
+  - component: {fileID: 5441987761569915270}
   m_Layer: 10
   m_Name: Switch
   m_TagString: Untagged
@@ -1383,3 +1586,24 @@ MonoBehaviour:
   switchPanel: {fileID: 1626639472}
   switchOn: 0
   switchColor: {fileID: 0}
+--- !u!114 &5441987761569915270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7464837897631292851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 0
+  OwnershipTransfer: 0
+  ObservedComponents: []
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

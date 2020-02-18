@@ -1146,6 +1146,16 @@ PrefabInstance:
       propertyPath: viewIdField
       value: 11
       objectReference: {fileID: 0}
+    - target: {fileID: 49970083508187319, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
+        type: 3}
+      propertyPath: viewIdField
+      value: 21
+      objectReference: {fileID: 0}
+    - target: {fileID: 1447631514434331080, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
+        type: 3}
+      propertyPath: viewIdField
+      value: 23
+      objectReference: {fileID: 0}
     - target: {fileID: 1895424696208427925, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
         type: 3}
       propertyPath: viewIdField
@@ -1155,6 +1165,11 @@ PrefabInstance:
         type: 3}
       propertyPath: Synchronization
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2540155707667701453, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
+        type: 3}
+      propertyPath: viewIdField
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 2559848149273873609, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
         type: 3}
@@ -1206,6 +1221,16 @@ PrefabInstance:
       propertyPath: Synchronization
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5441987761569915270, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
+        type: 3}
+      propertyPath: viewIdField
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 6348681000575274909, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
+        type: 3}
+      propertyPath: viewIdField
+      value: 22
+      objectReference: {fileID: 0}
     - target: {fileID: 6533126708768910597, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
         type: 3}
       propertyPath: viewIdField
@@ -1215,6 +1240,16 @@ PrefabInstance:
         type: 3}
       propertyPath: Synchronization
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7018291367842111147, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
+        type: 3}
+      propertyPath: viewIdField
+      value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 7239355213585153233, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
+        type: 3}
+      propertyPath: viewIdField
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7464837897441994628, guid: 13e7dd5c5d8e5d94c84c0e82489b91d7,
         type: 3}
@@ -1555,6 +1590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be4bb7d2c6ba44c4f9342ba4a1ded3ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInCage: 0
 --- !u!54 &1893965948
 Rigidbody:
   m_ObjectHideFlags: 0

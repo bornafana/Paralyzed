@@ -5,57 +5,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PhotonView))]
 public class PressurePad : MonoBehaviourPun
 {
+    public Cage cageToDrop;
     public Animator animator;
     public Material materialWhenActive;
-    private bool active = false;
+    private bool active = true;
 
-    public void OnEvent(EventData photonEvent)
+    private void OnTriggerEnter(Collider col)
     {
-        if (photonEvent.Code == (byte)PhotonEventCodes.EventCodes.PRESSURE_PAD)
+        if (col.CompareTag("Player") && active)
         {
-            active = true;
-            GetComponent<Renderer>().material = materialWhenActive;
+            cageToDrop.CageDown();
+            animator.SetBool("PlayerOnPad", true);
         }
     }
 
-    private void OnEnable()
+    private void OnTriggerExit(Collider col)
     {
-        PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
-
-    }
-
-    private void OnDisable()
-    {
-        PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
-    }
-
-    private void OnCollisionEnter(Collision col)
-    {
-        if (col.transform.CompareTag("Player") && active)
+        if (col.CompareTag("Player") && active)
         {
-                DropCage();
-                //animator.SetBool("PlayerOnPad", true);
+            cageToDrop.CageUp();
+            animator.SetBool("PlayerOnPad", false);
         }
     }
 
-    private void OnCollisionExit(Collision col)
+
+    [PunRPC]
+    public void RPC_ActivatePad()
     {
-        if (col.transform.CompareTag("Player") && active)
-        {
-            //animator.SetBool("PlayerOnPad", false);
-        }
+        active = true;
+        GetComponent<Renderer>().material = materialWhenActive;
     }
 
-    private void DropCage()
+    public void ActivatePad()
     {
-        RaiseEventOptions options = new RaiseEventOptions()
-        {
-            CachingOption = EventCaching.DoNotCache,
-            Receivers = ReceiverGroup.All
-        };
-
-        PhotonNetwork.RaiseEvent((byte)PhotonEventCodes.EventCodes.CAGE, null, options, SendOptions.SendUnreliable);
+        photonView.RPC("RPC_ActivatePad", RpcTarget.All);
     }
 }

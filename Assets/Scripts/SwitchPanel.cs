@@ -6,10 +6,17 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 
+[RequireComponent(typeof(PhotonView))]
 public class SwitchPanel : MonoBehaviourPun
 {
-    private const byte PRESSURE_PAD = 1;
+    private enum Pad
+    {
+        DEAF,
+        MUTE
+    }
 
+    private Pad pressurePadToActivate;
+    public PressurePad padToActivate;
     public List<SwitchController> switches;
     public List<bool> correctPattern;
     public List<bool> switchPattern = new List<bool>();
@@ -38,12 +45,26 @@ public class SwitchPanel : MonoBehaviourPun
 
     private void EnablePressurePadEvent()
     {
+        //RPC
+        padToActivate.ActivatePad();
+
+
+        // EVENT
         RaiseEventOptions options = new RaiseEventOptions()
         {
             CachingOption = EventCaching.DoNotCache,
             Receivers = ReceiverGroup.All
         };
 
-        PhotonNetwork.RaiseEvent((byte)PhotonEventCodes.EventCodes.PRESSURE_PAD, null, options, SendOptions.SendUnreliable);
+        switch (pressurePadToActivate)
+        {
+            case Pad.DEAF:
+                PhotonNetwork.RaiseEvent((byte)PhotonEventCodes.EventCodes.PRESSURE_PAD_DEAF, null, options, SendOptions.SendUnreliable);
+            break;
+
+            case Pad.MUTE:
+                PhotonNetwork.RaiseEvent((byte)PhotonEventCodes.EventCodes.PRESSURE_PAD_MUTE, null, options, SendOptions.SendUnreliable);
+                break;
+        }
     }
 }

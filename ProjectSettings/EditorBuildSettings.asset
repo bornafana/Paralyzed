@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Launcher.unity
     guid: 9020cbf7478b2674f95bf8295341f255
   - enabled: 1
-    path: Assets/Scenes/Room2.unity
-    guid: 16cbed049ebf13b42b5fc4cf1c73d374
+    path: Assets/Scenes/BDM-DEMO-LD.unity
+    guid: 7c6085457083e6447aac480fd72e815b
   m_configObjects: {}

@@ -20,11 +20,21 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public static GameManager Instance;
     public LifeCounter lifeCounter;
-
-    public GameObject localPlayer;
     public float playerSpawnDelay;
     public Text pingText;
-    private Transform playerRespawnPoint;
+
+    [Header("Player Spawn Points")]
+    public Transform blindSpawn;
+    public Transform deafSpawn;
+    public Transform muteSpawn;
+    private Transform startSpawnPoint;
+
+    [Header("Blind flip chart - Temp for testing")]
+    public GameObject runeToFlip;
+
+    [Header("Debug - Do not use")]
+    public GameObject localPlayer;
+
 
     #endregion
 
@@ -46,7 +56,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     /// </summary>
     void Start()
     {
-        playerRespawnPoint = transform;
         Instance = this;
 
         // in case we started this demo with the wrong scene being active, simply load the menu scene
@@ -56,6 +65,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 
             return;
         }
+
+        if (PhotonNetwork.NickName.ToLower().Trim().Contains("blind"))
+        {
+            startSpawnPoint = blindSpawn;
+            runeToFlip.SetActive(true);
+        }
+        else if (PhotonNetwork.NickName.ToLower().Trim().Contains("mute"))
+            startSpawnPoint = muteSpawn;
+        else if (PhotonNetwork.NickName.ToLower().Trim().Contains("deaf"))
+            startSpawnPoint = deafSpawn;
+        else
+            startSpawnPoint = blindSpawn;
+
 
         StartCoroutine(SpawnPlayerWithDelay());
         //if (FirstPersonController.LocalPlayerInstance == null)
@@ -86,10 +108,22 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(playerSpawnDelay);
 
-        if (RigidbodyFirstPersonController.LocalPlayerInstance == null)
+        //if (RigidbodyFirstPersonController.LocalPlayerInstance == null)
+        //{
+        //    Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
+        //    localPlayer = PhotonNetwork.Instantiate(playerPrefab.name, startSpawnPoint.position, Quaternion.identity, 0);
+        //    localPlayer.name = PhotonNetwork.NickName;
+        //}
+        //else
+        //{
+
+        //    Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
+        //}
+        if (FirstPersonController.LocalPlayerInstance == null)
         {
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
-            localPlayer = PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0f, 2f, 0f), Quaternion.identity, 0);
+            localPlayer = PhotonNetwork.Instantiate(playerPrefab.name, startSpawnPoint.position, Quaternion.identity, 0);
+            localPlayer.name = PhotonNetwork.NickName;
         }
         else
         {
@@ -105,6 +139,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     /// </summary>
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+            localPlayer.transform.position = blindSpawn.position;
+        if (Input.GetKeyDown(KeyCode.Keypad2))
+            localPlayer.transform.position = deafSpawn.position;
+        if (Input.GetKeyDown(KeyCode.Keypad3))
+            localPlayer.transform.position = muteSpawn.position;
+        if (Input.GetKeyDown(KeyCode.P))
+            RespawnPlayer();
+
         pingText.text = "Ping: " + PhotonNetwork.GetPing();
         // "back" button of phone equals "Escape". quit app if that's pressed
         if (Input.GetKeyDown(KeyCode.Tilde))
@@ -119,7 +162,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         StartCoroutine(PlayerControlsCooldown(0.5f));
         lifeCounter.RemoveLife();
-        localPlayer.transform.position = playerRespawnPoint.position;
+        localPlayer.transform.position = startSpawnPoint.position;
     }
 
     private IEnumerator PlayerControlsCooldown(float delay)

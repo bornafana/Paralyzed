@@ -8,6 +8,7 @@ TagManager:
   - ObjectName
   - InspectionPoint
   - Inspection
+  - Toggler
   layers:
   - Default
   - TransparentFX
